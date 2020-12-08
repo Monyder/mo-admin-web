@@ -6,7 +6,19 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  /*mounted() {
+    let isChrome = navigator.userAgent.indexOf('Chrome') > -1
+    if (!isChrome) {
+      this.$message({
+        showClose: true,
+        dangerouslyUseHTMLString: true,
+        message: '<strong>建议使用Chrome浏览器访问本系统</strong>，<a href="/downLoadChrome" target="_blank">点击下载</a>',
+        type: 'warning'
+      })
+    }
+  }*/
+
 }
 </script>
 
