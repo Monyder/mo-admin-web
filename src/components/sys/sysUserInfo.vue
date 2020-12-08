@@ -40,6 +40,7 @@
     components: {editSysUser},
     data() {
       return {
+        url: '/sysUser/sys-user',
         formInline: {},
         tableData: [],
         sysUserInfo: {},
@@ -52,14 +53,14 @@
     },
     methods: {
       async getAllUserInfo() {
-        let {data: res} = await this._post("/sysUser/sys-user/getAllUserInfo");
+        let {data: res} = await this._post(this.url + '/getAllUserInfo');
         this.tableData = res;
       },
       async handleDelete(index, row) {
         let isConfirm = await this.$confirm("确认删除？", '提示', {type: 'warning'}).catch(() => {
         });
         if (!isConfirm) return;
-        await this._post("/sysUser/sys-user/delUser", {"id": row.id});
+        await this._post(this.url + '/delUser', {"id": row.id});
         await this.getAllUserInfo();
       },
       async handleEdit(index, row) {

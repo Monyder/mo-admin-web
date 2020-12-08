@@ -8,7 +8,7 @@
           <el-row>
             <el-col :span="11">
               <el-form-item label="账号:" prop="username">
-                <el-input v-model="ruleForm.username"></el-input>
+                <el-input :disabled="isDisabled" v-model="ruleForm.username"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -29,7 +29,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="roleIsShow">
             <el-col :span="11">
               <el-form-item label="角色:" prop="roleId">
                 <el-select style="width: 100%" v-model="ruleForm.roleId" placeholder="请选择角色">
@@ -41,7 +41,7 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="备注:" prop="remark">
-                <el-input type="textarea" :rows="3" v-model="ruleForm.remark"></el-input>
+                <el-input :disabled="isDisabled" type="textarea" :rows="3" v-model="ruleForm.remark"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -58,7 +58,6 @@
 
 </style>
 <script>
-  const url = '/sysUser/sys-user';
   export default {
     props: ['isSysUserEditShow', 'sysUserInfo', 'sysTitle'],
     data() {
@@ -75,8 +74,11 @@
         if (!value) return callback(new Error("请选择角色！"));
       }
       return {
+        url: '/sysUser/sys-user',
         title: '',
         roleList: [],
+        roleIsShow: true,
+        isDisabled: false,
         ruleForm: {
           username: "",
           password: '',
@@ -110,8 +112,9 @@
         else await this.handleSave();
       },
       async handleSave() {
-        if (this.sysTitle === '0') await this._post(url + "/addUser", this.ruleForm);
-        else await this._post(url + "/upUser", this.ruleForm);
+        if (this.sysTitle === '0') await this._post(this.url + "/addUser", this.ruleForm);
+        else if (this.sysTitle === '3') await this._post(this.url + "/upUserPassword", this.ruleForm);
+        else await this._post(this.url + "/upUser", this.ruleForm);
         await this.handleClose();
         this.$emit("refGetAllUserInfo");
       },
@@ -123,7 +126,13 @@
         const {data: res} = await this._post("/sysRole/sys-role/getSysRoleInfo");
         this.roleList = res.list;
         if (this.sysTitle === '0') this.title = '新建用户';
-        else {
+        else if (this.sysTitle === '3') {
+          this.title = '修改密码';
+          this.roleIsShow = false;
+          this.isDisabled = true;
+          let {data: res} = await this._post(this.url + '/findUserById', {'id': this.sysUserInfo.id});
+          this.ruleForm = res;
+        } else {
           this.title = '修改用户';
           this.ruleForm = {...this.sysUserInfo};
         }

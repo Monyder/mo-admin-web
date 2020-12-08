@@ -17,25 +17,19 @@ import {getRequest, postRequest} from './libs/api'
 import {
   clearCookie,
   clearRouteAndMenu,
-  getUserTokenFromCookie,
   initRouter,
   getIsAuthority,
-  existRouteInHome,
   assembleMenus
 } from './libs/base'
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
-Vue.prototype.Qs = qs;
-Vue.prototype.Moment = moment;
 Vue.prototype._post = postRequest;
 Vue.prototype._get = getRequest;
 Vue.prototype.assembleMenus = assembleMenus;
 Vue.prototype.getIsAuthority = getIsAuthority;
-Vue.prototype.getUserTokenFromCookie = getUserTokenFromCookie;
 Vue.prototype.clearCookie = clearCookie;
 Vue.prototype.clearRouteAndMenu = clearRouteAndMenu;
-Vue.prototype.existRouteInHome = existRouteInHome;
 Vue.filter('dateFormat', (dataStr, pattern = 'YYYY-MM-DD') => {
   if (!dataStr) return '';
   return moment(dataStr).format(pattern);

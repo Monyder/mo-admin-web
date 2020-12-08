@@ -10,11 +10,11 @@
       <div class="header_title"></div>
     </div>
     <div style="float: right">
-      <el-dropdown class="header_operation">
+      <el-dropdown class="header_operation" @command="handleCommand">
         <span>
           <i class="el-icon-s-custom"/>
           <span class="header_dropdown_title">
-            {{userName}}
+            {{username}}
             <i class="el-icon-arrow-down"/>
           </span>
         </span>
@@ -27,30 +27,56 @@
     </div>
     <div style="clear: both"></div>
     <about :aboutVisible.sync="aboutVisible"/>
+    <edit-sys-user :isSysUserEditShow.sync="formVisible" :sysTitle="sysTitle"
+                   :sysUserInfo="sysUserInfo" @refGetAllUserInfo="refGetAllUserInfo"></edit-sys-user>
   </div>
 </template>
 
 <script>
   import About from "./About";
+  import editSysUser from "../sys/form/editSysUser";
 
   export default {
     name: "TopHeader",
-    components: {About},
+    components: {About, editSysUser},
     props: ['leftCollapse'],
     data() {
       return {
-        userName: '',
+        sysTitle: '',
+        username: '',
+        sysUserInfo: {},
         formVisible: false,
         aboutVisible: false
       }
     },
     mounted() {
-      this.userName = sessionStorage.getItem('userName')
+      this.username = sessionStorage.getItem('username');
+      this.sysUserInfo.id = sessionStorage.getItem('id');
     },
     methods: {
       unfoldOrFold() {
         this.$emit('update:leftCollapse', !this.leftCollapse)
       },
+      handleCommand(command) {
+        if (command == 'editPassWord') {
+          this.sysTitle = '3';
+          this.formVisible = true;
+        }
+        if (command == 'logout') {
+          this.refGetAllUserInfo();
+        }
+        if (command == 'about') {
+          this.aboutVisible = true;
+        }
+      },
+      refGetAllUserInfo() {
+        this.clearCookie();
+        this.clearRouteAndMenu();
+        sessionStorage.clear();
+        this.$router.replace({path: '/'}).catch(err => {
+        })
+      }
+
     }
   }
 </script>
@@ -82,6 +108,7 @@
     height: 24px;
     margin: 5px 15px 5px 0;
   }
+
   .header_dropdown_title {
     cursor: pointer;
   }

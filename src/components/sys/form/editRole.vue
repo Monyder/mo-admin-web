@@ -84,7 +84,6 @@
       }
       return {
         title: '',
-        url: '/unit/unit',
         areaList: [],
         ruleForm: {
           code: '',

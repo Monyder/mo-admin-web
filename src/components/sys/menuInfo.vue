@@ -51,6 +51,14 @@
     <edit-menu :isShow.sync="isShow" :setTitle="setTitle" :menuData="menuData"
                @refGetMenuInfo="getSysMenu" @handleAppendNode="handleAppendNode"
                @handleUpdateNode="handleUpdateNode"></edit-menu>
+    <el-row class="table_pagination">
+      <el-pagination background layout="prev, pager, next"
+                     hide-on-single-page
+                     :current-page="currentPage"
+                     :page-size="pageSize"
+                     :total="total"
+                     @current-change="hendlerCurrentChange"></el-pagination>
+    </el-row>
   </div>
 </template>
 <style>
@@ -63,7 +71,7 @@
     components: {editMenu},
     data() {
       return {
-        url: '/sysMenu/sys-menu',
+        url:'/sysMenu/sys-menu',
         tableData: [],
         treeData: [],
         total: 0,
@@ -102,9 +110,19 @@
         this.selTNCIdArray.push(treeNode.id);
         if (!treeNode.children || treeNode.children.length === 0) return;
         let children = treeNode.children;
+        if (treeNode.id === '1' && treeNode.label == '根目录') {
+          children.forEach((treeNode) => {
+            this.selTNCIdArray.push(treeNode.id);
+          })
+          return;
+        }
         children.forEach((treeNode) => {
           this.selfAndAllChildrenIdArray(treeNode)
         })
+      },
+      async hendlerCurrentChange(currentPage) {
+        if (currentPage !== this.currentPage) this.currentPage = currentPage;
+        await this.getSysMenu();
       },
       async getSysMenuByNodePid() {
         const {data: res} = await this._post(this.url + '/getSysMenuByNodePid', {

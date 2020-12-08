@@ -35,11 +35,14 @@ export const initRouter = async () => {
     return
   }
   let routes = [];
-  assembleRouter(routes, data);
+  let {children} = data[0];
+  if (children && children instanceof Array) {
+    assembleRouter(routes, children);
+  }
   home.children = [...home.children, ...routes];
   router.addRoutes([home]);
   store.commit('setHomeRoute', home);
-  store.commit('setMenus', assembleMenus(data));
+  store.commit('setMenus', assembleMenus(children));
 }
 
 export const assembleRouter = (routes, menus) => {
@@ -60,7 +63,7 @@ export const assembleRouter = (routes, menus) => {
 
 export const getIsAuthority = async () => {
   const {data: res_} = await postRequest('/sysRole/sys-role/finRoleById', {id: sessionStorage.getItem("roleId")});
-  if (res_.authority === 1)  store.commit('setIsAuthority', false);
+  if (res_.authority === 1) store.commit('setIsAuthority', false);
   else if (res_.authority === 0) store.commit('setIsAuthority', true);
 }
 
