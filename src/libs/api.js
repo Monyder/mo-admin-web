@@ -24,6 +24,7 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(resp => {
   NProgress.done();
   store.commit('setLoading', false);
+
   if (!resp.status || resp.status !== 200) {
     Message.error({message: '响应状态码无法获取或无法识别'});
     return Promise.reject('响应状态码无法获取或无法识别');
@@ -32,21 +33,21 @@ axios.interceptors.response.use(resp => {
     Message.error({message: '未获取到返回数据'});
     return Promise.reject('未获取到返回数据');
   }
-  if (resp.data.code === 500) {
-    Message.error({message: resp.data.data});
-    return Promise.reject(resp.data.data);
-  }
+
   if (resp.data.code === 200) {
-    if (resp.data.result == "err") {
-      Message.error({message: resp.data.data});
-      return Promise.reject(resp.data.data);
-    } else if (resp.data.message == "errMsg") {
-      clearCookie();
-      router.replace({path: '/'}).catch(err => {
-      });
-      return Promise.reject(resp.data.data);
-    }
     return resp.data;
+  }
+  if (resp.data.code === -1 || resp.data.code === 500) {
+    debugger
+    Message.error({message: resp.data.msg});
+    return Promise.reject(resp.data.msg);
+  }
+  if (resp.data.code === 0) {
+    console.log(resp.data);
+    clearCookie();
+    router.replace({path: '/'}).catch(err => {
+    });
+    return Promise.reject(resp.data.msg);
   }
   Message.error({message: '无法解析返回数据的状态码'});
   return Promise.reject('无法解析返回数据的状态码');

@@ -60,9 +60,9 @@
         this.handleChecked();
       },
       async handleMenuInfo() {
-        const {data: res} = await this._post(this.$parent.url + '/findMenuInfo', {id: this.roleMenuData.id});
+        const res = await this._post(this.$parent.url + '/findMenuInfo', {id: this.roleMenuData.id});
         const assembleMenus = this.assembleMenus(res.data);
-        if (res.result === 'admin') {
+        if (res.msg === 'admin') {
           await this.handleDisMenu(assembleMenus);
           this.treeData = assembleMenus;
         } else this.treeData = assembleMenus;
