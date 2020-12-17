@@ -27,7 +27,7 @@
                 </el-table-column>
             </el-table>
         </el-row>
-        <edit-sys-user :isSysUserEditShow.sync="isSysUserEditShow" :sysTitle="sysTitle"
+        <edit-sys-user :isInfoSetEditShow.sync="isInfoSetEditShow" :sysTitle="sysTitle"
                        @refGetAllUserInfo="getAllUserInfo"
                        :sysUserInfo="sysUserInfo"></edit-sys-user>
     </div>
@@ -45,7 +45,7 @@
         tableData: [],
         sysUserInfo: {},
         sysTitle: '',
-        isSysUserEditShow: false
+        isInfoSetEditShow: false
       }
     },
     mounted() {

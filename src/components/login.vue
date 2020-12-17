@@ -37,8 +37,8 @@
           passWord: [{required: true, message: '请输入密码', trigger: 'blur'}]
         },
         loginForm: {
-          loginName: '',
-          passWord: ''
+          loginName: 'admin',
+          passWord: 'admin'
         }
       }
     },

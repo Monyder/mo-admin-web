@@ -38,7 +38,6 @@ axios.interceptors.response.use(resp => {
     return resp.data;
   }
   if (resp.data.code === -1 || resp.data.code === 500) {
-    debugger
     Message.error({message: resp.data.msg});
     return Promise.reject(resp.data.msg);
   }
@@ -75,7 +74,7 @@ export const postRequest = (url, params) => {
     }
   })
 };
-export const getRequest = (url) => {
+export const getRequest = url => {
   return axios({
     method: 'get',
     url: `${base}${url}`
