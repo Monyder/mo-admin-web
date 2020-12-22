@@ -20,33 +20,29 @@
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item icon="el-icon-key" command="editPassWord">修改密码</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-warning" command="about">关于</el-dropdown-item>
           <el-dropdown-item icon="el-icon-top-left" command="logout">注销</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
     <div style="clear: both"></div>
-    <about :aboutVisible.sync="aboutVisible"/>
     <edit-sys-user :isSysUserEditShow.sync="formVisible" :sysTitle="sysTitle"
                    :sysUserInfo="sysUserInfo" @refGetAllUserInfo="refGetAllUserInfo"></edit-sys-user>
   </div>
 </template>
 
 <script>
-  import About from "./About";
-  import editSysUser from "../sys/form/editSysUser";
+  import editSysUser from "../sys/edit/editSysUser";
 
   export default {
     name: "TopHeader",
-    components: {About, editSysUser},
+    components: {editSysUser},
     props: ['leftCollapse'],
     data() {
       return {
         sysTitle: '',
         username: '',
         sysUserInfo: {},
-        formVisible: false,
-        aboutVisible: false
+        formVisible: false
       }
     },
     mounted() {
@@ -64,9 +60,6 @@
         }
         if (command == 'logout') {
           this.refGetAllUserInfo();
-        }
-        if (command == 'about') {
-          this.aboutVisible = true;
         }
       },
       refGetAllUserInfo() {

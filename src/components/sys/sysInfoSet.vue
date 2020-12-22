@@ -9,8 +9,8 @@
       <el-table highlight-current-row :data="tableData" v-loading="$store.state.loading">
         <el-table-column align="center" type="index" label="序号"></el-table-column>
         <el-table-column align="center" prop="code" label="编码"></el-table-column>
-        <el-table-column align="center" prop="name" label="名称"></el-table-column>
-        <el-table-column align="center" prop="isSysName" label="是否为系统信息集"></el-table-column>
+        <el-table-column align="center" prop="name" label="表名"></el-table-column>
+        <el-table-column align="center" prop="isSysName" label="是否是系统表"></el-table-column>
         <el-table-column align="center" prop="characterSet" label="字符集"></el-table-column>
         <el-table-column align="center" prop="remark" label="注释"></el-table-column>
         <el-table-column align="center" label="操作" v-if="$store.state.isAuthority">
@@ -34,22 +34,32 @@
     <edit-info-set :isInfoSetEditShow.sync="isInfoSetEditShow" :sysTitle="sysTitle"
                    @refHandleGetInfo="handleGetInfo"
                    :sysInfoSet="sysInfoSet"></edit-info-set>
+    <el-row class="table_pagination">
+      <el-pagination background layout="prev, pager, next"
+                     hide-on-single-page
+                     :current-page="currentPage"
+                     :page-size="pageSize"
+                     :total="total"
+                     @current-change="hendlerCurrentChange"></el-pagination>
+    </el-row>
   </div>
 </template>
 
 <script>
-  import editInfoSet from './form/editInfoSet'
+  import editInfoSet from './edit/editInfoSet'
 
   export default {
     components: {editInfoSet},
     data() {
       return {
         url: '/sysInfoSet/sys-info-set',
-        formInline: {},
         tableData: [],
         sysInfoSet: {},
+        total: 0,
+        pageSize: 10,
+        currentPage: 0,
         sysTitle: '',
-        isInfoSetEditShow: false
+        isInfoSetEditShow: false,
       }
     },
     mounted() {
@@ -57,11 +67,23 @@
     },
     methods: {
       async handleGetInfo() {
-        let {data: res} = await this._get(this.url + '/findSysInfoSet');
+        let {data: res} = await this._post(this.url + '/findSysInfoSet', {
+          'pageNum': this.currentPage,
+          'pageSize': this.pageSize
+        });
         this.tableData = res.records;
+        this.currentPage = res.current;
+        this.pageSize = res.size;
+        this.total = res.total;
+
+      },
+      async hendlerCurrentChange(currentPage) {
+        if (currentPage !== this.currentPage) this.currentPage = currentPage;
+        await this.handleGetInfo();
       },
       async handleConfig(index, row) {
-
+        await this.$router.push({path: '/home/sysInfoItem', query: {infoSetcode: row.code}}).catch((err) => {
+        });
       },
       async handleDelete(index, row) {
         let isConfirm = await this.$confirm("此删除将会删除表中所有数据，并且不会恢复，确认删除？", '提示', {type: 'warning'}).catch(() => {
@@ -71,7 +93,7 @@
         await this.handleGetInfo();
       },
       async handleEdit(index, row) {
-        this.sysUserInfo = row;
+        this.sysInfoSet = row;
         this.sysTitle = '1';
         this.isInfoSetEditShow = true;
       },

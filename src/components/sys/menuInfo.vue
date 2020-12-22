@@ -65,7 +65,7 @@
 
 </style>
 <script>
-  import editMenu from './form/editMenu'
+  import editMenu from './edit/editMenu'
 
   export default {
     components: {editMenu},

@@ -51,8 +51,8 @@
 </template>
 
 <script>
-  import editRoleMenu from './form/editRoleMenu'
-  import editRole from "./form/editRole";
+  import editRoleMenu from './edit/editRoleMenu'
+  import editRole from "./edit/editRole";
 
   export default {
     components: {editRoleMenu, editRole},

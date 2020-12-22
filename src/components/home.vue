@@ -15,9 +15,9 @@
 </template>
 
 <script>
-  import LeftMenu from "./base/LeftMenu";
-  import TopHeader from "./base/TopHeader";
-  import CenterMain from "./base/CenterMain";
+  import LeftMenu from "./base/menu";
+  import TopHeader from "./base/header";
+  import CenterMain from "./base/main";
 
   export default {
     name: "home",

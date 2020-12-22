@@ -20,7 +20,8 @@
           <el-row>
             <el-col :span="11">
               <el-form-item label="是否为系统表:" prop="isSysName">
-                <el-select style="width: 100%" v-model="ruleForm.isSysName" placeholder="请选择是否为系统信息集">
+                <el-select :disabled="isDisabled" style="width: 100%" v-model="ruleForm.isSysName"
+                           placeholder="请选择是否为系统信息集">
                   <el-option label="否" value="否"></el-option>
                   <el-option label="是" value="是"></el-option>
                 </el-select>
@@ -28,7 +29,8 @@
             </el-col>
             <el-col :span="11">
               <el-form-item label="字符集:" prop="characterSet">
-                <el-select style="width: 100%" v-model="ruleForm.characterSet" placeholder="请选择字符集">
+                <el-select :disabled="isDisabled" style="width: 100%" v-model="ruleForm.characterSet"
+                           placeholder="请选择字符集">
                   <el-option label="utf8" value="utf8"></el-option>
                   <el-option label="utf8mb4" value="utf8mb4"></el-option>
                 </el-select>
@@ -38,7 +40,7 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="注释:" prop="remark">
-                <el-input :disabled="isDisabled" type="textarea" :rows="3" v-model="ruleForm.remark"></el-input>
+                <el-input type="textarea" :rows="3" v-model="ruleForm.remark"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -46,7 +48,7 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
                 <el-button @click="handleClose">取 消</el-button>
-                <el-button type="primary" @click="subSaveSysUser">确 定</el-button>
+                <el-button type="primary" @click="handleSub">确 定</el-button>
           </span>
     </el-dialog>
   </div>
@@ -65,7 +67,6 @@
         if (!value) return callback(new Error("信息集名称不能为空！"));
       }
       return {
-        url: '/sysUser/sys-user',
         title: '',
         isDisabled: false,
         ruleForm: {
@@ -87,15 +88,20 @@
 
     },
     methods: {
-      async subSaveSysUser() {
+      async handleSub() {
         let valid = await this.$refs.form.validate().catch(() => {
         });
         if (!valid) return;
         else await this.handleSave();
       },
       async handleSave() {
+        console.log(this.ruleForm);
         if (this.sysTitle === '0') await this._post(this.$parent.url + "/addInfoSet", this.ruleForm);
-        else await this._post(this.url + "/upUser", this.ruleForm);
+        else await this._post(this.$parent.url + "/upInfoSet", {
+          'id': this.ruleForm.id,
+          'name': this.ruleForm.name,
+          'remark': this.ruleForm.remark
+        });
         await this.handleClose();
         this.$emit("refHandleGetInfo");
       },
@@ -110,6 +116,7 @@
         else {
           this.title = '修改信息集';
           this.ruleForm = {...this.sysInfoSet};
+          this.isDisabled = true;
         }
       }
     }

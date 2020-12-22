@@ -23,11 +23,11 @@
       }
     },
     mounted() {
-      this.routerChangeCascadeTab(this.$route.path);
+      this.routerChangeCascadeTab(this.$route.fullPath);
     },
     watch: {
       $route(to) {
-        this.routerChangeCascadeTab(to.path);
+        this.routerChangeCascadeTab(to.fullPath);
       },
       activeTab(val) {
         if (this.activeTab) this.isShowCenterMain = true;
