@@ -17,12 +17,12 @@
         <el-table-column align="center" prop="dataType" label="数据类型"></el-table-column>
         <el-table-column align="center" prop="length" label="长度"></el-table-column>
         <el-table-column align="center" prop="precisionSet" label="精度"></el-table-column>
-        <el-table-column align="center" prop="nullableName" label="是否为空"></el-table-column>
+        <el-table-column align="center" prop="nullableName" label="不是NULL"></el-table-column>
         <el-table-column align="center" prop="remark" label="注释"></el-table-column>
         <el-table-column align="center" label="操作" width="300" v-if="$store.state.isAuthority">
           <template slot-scope="scope">
             <el-tooltip :open-delay="700" effect="light" content="上移" placement="top">
-              <el-button type="warning" @click="handleTop(scope.$index, scope.row)"
+              <el-button type="warning" @click="handleEditTop(scope.$index, scope.row)"
                          icon="el-icon-top" size="mini"/>
             </el-tooltip>
             <el-tooltip :open-delay="700" effect="light" content="下移" placement="top">
@@ -93,17 +93,19 @@
         let isConfirm = await this.$confirm("此删除将会删除此字段，并且不会恢复，确认删除？", '提示', {type: 'warning'}).catch(() => {
         });
         if (!isConfirm) return;
-        await this._post(this.url + '/delInfoItemById', {"id": row.id});
+        await this._post(this.url + '/delInfoItemById', {'id': row.id});
         await this.handleGetInfoItemBySetCode();
       },
-      async handleTop(index, row) {
-
+      async handleEditTop(index, row) {
+        await this._post(this.url + '/topMoveColumn', {'id': row.id});
+        await this.handleGetInfoItemBySetCode();
       },
       async handleEditBottom(index, row) {
-
+        await this._post(this.url + '/bottomMoveColumn', {'id': row.id});
+        await this.handleGetInfoItemBySetCode();
       },
       async handleEdit(index, row) {
-        this.sysInfoSet = row;
+        this.sysInfoItem = row;
         this.sysTitle = '1';
         this.isInfoItemEditShow = true;
       },

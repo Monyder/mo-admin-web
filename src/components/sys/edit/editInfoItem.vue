@@ -8,7 +8,7 @@
           <el-row>
             <el-col :span="11">
               <el-form-item label="字段编码:" prop="code">
-                <el-input v-model="ruleForm.code"></el-input>
+                <el-input :disabled="isDisabled" v-model="ruleForm.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -80,6 +80,7 @@
       }
       return {
         title: '',
+        isDisabled: false,
         isLengthShow: false,
         isPrecisionSetShow: false,
         dataTypes: [],
@@ -119,6 +120,8 @@
         this.dataTypes = res;
       },
       async handleTrigger(id) {
+        this.ruleForm.length = '';
+        this.ruleForm.precisionSet = '';
         this.isLengthShow = false;
         this.isPrecisionSetShow = false;
         this.dataTypes.forEach(item => {
@@ -137,11 +140,7 @@
       },
       async handleSave() {
         if (this.sysTitle === '0') await this._post(this.$parent.url + "/addInfoItem", this.ruleForm);
-        else await this._post(this.$parent.url + "/upInfoItem", {
-          'id': this.ruleForm.id,
-          'name': this.ruleForm.name,
-          'remark': this.ruleForm.remark
-        });
+        else await this._post(this.$parent.url + "/upInfoItem", this.ruleForm);
         await this.handleClose();
         this.$emit("refHandleGetInfo");
       },
@@ -159,10 +158,13 @@
       },
       async handleOpen() {
         if (this.sysTitle === '0') {
+          this.isDisabled = false;
           this.title = '添加字段';
           this.ruleForm.infosetCode = this.$parent.infoSetCode;
         } else {
           this.title = '修改字段';
+          if (this.sysInfoItem.length != '' && this.sysInfoItem.length != null) this.isLengthShow = true;
+          if (this.sysInfoItem.precisionSet != '' && this.sysInfoItem.precisionSet != null) this.isPrecisionSetShow = true;
           this.ruleForm = {...this.sysInfoItem};
           this.isDisabled = true;
         }
