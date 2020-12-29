@@ -1,8 +1,19 @@
 <template>
   <div>
-    <el-row v-if="$store.state.isAuthority">
-      <div style="float: left;margin-left: 50px;margin-top: 10px">
+    <el-row style="margin-top: 20px">
+      <div style="float: left;margin-left: 50px;" v-if="$store.state.isAuthority">
         <el-button type="success" size="medium" @click="handleAdd">新建</el-button>
+      </div>
+      <div>
+        <el-form :model="form" class="form-inline" label-width="100px">
+          <el-col :span="5" :push="16">
+            <el-form-item>
+              <el-input v-model="form.name" prefix-icon="el-icon-search" placeholder="搜索"
+                        @input="handleGetInfo"
+                        @keyup.enter.native="handleGetInfo"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-form>
       </div>
     </el-row>
     <el-row style="margin-top: 10px">
@@ -60,22 +71,25 @@
         currentPage: 0,
         sysTitle: '',
         isInfoSetEditShow: false,
+        form: {
+          name: '',
+        },
       }
     },
     mounted() {
       this.handleGetInfo();
     },
     methods: {
-      async handleGetInfo() {
+      async handleGetInfo(code) {
         let {data: res} = await this._post(this.url + '/findSysInfoSet', {
           'pageNum': this.currentPage,
-          'pageSize': this.pageSize
+          'pageSize': this.pageSize,
+          'code': code
         });
         this.tableData = res.records;
         this.currentPage = res.current;
         this.pageSize = res.size;
         this.total = res.total;
-
       },
       async hendlerCurrentChange(currentPage) {
         if (currentPage !== this.currentPage) this.currentPage = currentPage;

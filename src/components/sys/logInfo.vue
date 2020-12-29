@@ -1,5 +1,4 @@
 <template>
-     
   <div>
     <el-row style="margin-top: 20px">
       <el-form :model="form" class="form-inline" label-width="100px">
