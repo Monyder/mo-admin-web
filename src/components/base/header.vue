@@ -10,6 +10,21 @@
       <div class="header_title"></div>
     </div>
     <div style="float: right">
+      <el-dropdown class="header_operation" @command="handleGetMenuCommandDev">
+        <span>
+          <i class="el-icon-s-tools"/>
+          <span class="header_dropdown_title">
+            控制面板
+            <i class="el-icon-arrow-down"/>
+          </span>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="menu in menuList" :icon="menu.nodeIconcls" :command="menu">
+            {{menu.nodeName}}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
       <el-dropdown class="header_operation" @command="handleCommand">
         <span>
           <i class="el-icon-s-custom"/>
@@ -31,7 +46,7 @@
 </template>
 
 <script>
-  import editSysUser from "../sys/edit/editSysUser";
+  import editSysUser from "../sys/edit/editSysUser"
 
   export default {
     name: "TopHeader",
@@ -42,16 +57,26 @@
         sysTitle: '',
         username: '',
         sysUserInfo: {},
+        menuList: [],
         formVisible: false
       }
     },
     mounted() {
       this.username = sessionStorage.getItem('username');
       this.sysUserInfo.id = sessionStorage.getItem('id');
+      this.handleGetMenuDev();
     },
     methods: {
       unfoldOrFold() {
         this.$emit('update:leftCollapse', !this.leftCollapse)
+      },
+      async handleGetMenuDev() {
+        const {data: res} = await this._post('/sysMenu/sys-menu/getSysMenuByDev');
+        this.menuList = res;
+      },
+      handleGetMenuCommandDev(command) {
+        this.addMenuDevToRouter(command);
+        this.$emit('addTabProxy', command.nodeName, '/home/' + command.nodePath);
       },
       handleCommand(command) {
         if (command == 'editPassWord') {

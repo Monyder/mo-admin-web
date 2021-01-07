@@ -8,7 +8,7 @@
           <el-row>
             <el-col :span="11">
               <el-form-item label="角色编码:" prop="code">
-                <el-input v-model="ruleForm.code"></el-input>
+                <el-input :disabled="isDisabled" v-model="ruleForm.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
@@ -85,6 +85,7 @@
       return {
         title: '',
         areaList: [],
+        isDisabled: false,
         ruleForm: {
           code: '',
           name: '',
@@ -133,6 +134,7 @@
       async handleOpen() {
         if (this.sysTitle === '0') this.title = '新建角色';
         else {
+          this.isDisabled = true;
           this.title = '修改角色';
           this.ruleForm = {...this.roleData};
         }

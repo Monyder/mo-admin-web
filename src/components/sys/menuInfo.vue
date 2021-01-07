@@ -71,7 +71,7 @@
     components: {editMenu},
     data() {
       return {
-        url:'/sysMenu/sys-menu',
+        url: '/sysMenu/sys-menu',
         tableData: [],
         treeData: [],
         total: 0,
@@ -101,7 +101,7 @@
     },
     methods: {
       async getSysMenu() {
-        let {data: res} = await this._post(this.url + '/getSysMenu');
+        let {data: res} = await this._post(this.url + '/getSysMenuByFuncTypeToDev');
         const assembleMenus = this.assembleMenus(res);
         this.treeData = assembleMenus;
       },

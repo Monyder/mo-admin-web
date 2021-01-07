@@ -96,6 +96,8 @@
         await this.handleGetInfo();
       },
       async handleConfig(index, row) {
+        const {data: res} = await this._post('/sysMenu/sys-menu/getSysMenuByNodePath', {'nodePath': 'sysInfoItem'});
+        this.addMenuDevToRouter(res);
         await this.$router.push({path: '/home/sysInfoItem', query: {infoSetcode: row.code}}).catch((err) => {
         });
       },

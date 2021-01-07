@@ -30,7 +30,7 @@ export const initRouter = async () => {
   if (home.children.length !== 1) {
     return;
   }
-  let {data} = await postRequest('/sysMenu/sys-menu/getSysMenu');
+  let {data} = await postRequest('/sysMenu/sys-menu/getSysMenuByFuncType', {'funcType': '0'});
   if (!data || data.length === 0) {
     return
   }
@@ -38,6 +38,16 @@ export const initRouter = async () => {
   let {children} = data[0];
   if (children && children instanceof Array) {
     assembleRouter(routes, children);
+  }
+  let tempMenu = sessionStorage.getItem('tempMenu');
+  if (tempMenu) {
+    let menu = JSON.parse(tempMenu);
+    let nodeComponent = menu.nodeComponent;
+    let route = {
+      path: menu.nodePath,
+      component: () => import(`../components${nodeComponent}`)
+    }
+    routes.push(route);
   }
   home.children = [...home.children, ...routes];
   router.addRoutes([home]);
@@ -60,6 +70,21 @@ export const assembleRouter = (routes, menus) => {
     }
   });
 }
+
+export const addMenuDevToRouter = (menu) => {
+  let home = router.options.routes.find(route => route.path === '/home');
+  let nodeComponent = menu.nodeComponent;
+  let route = {
+    path: menu.nodePath,
+    component: () => import(`../components${nodeComponent}`)
+  }
+  if (home.children && home.children instanceof Array) {
+    home.children.push(route);
+  }
+  router.addRoutes([home]);
+  sessionStorage.setItem('tempMenu', JSON.stringify(menu));
+}
+
 
 export const getIsAuthority = async () => {
   const {data: res_} = await postRequest('/sysRole/sys-role/finRoleById', {id: sessionStorage.getItem("roleId")});
@@ -100,14 +125,6 @@ export const clearRouteAndMenu = () => {
   homeRoute.children.splice(1, homeRoute.children.length);
   store.commit('setMenus', []);
 };
-export const existRouteInHome = (path) => {
-  let homeRoute = router.options.routes.find(route => route.path === '/home');
-  if (homeRoute && homeRoute.children) {
-    if (homeRoute.children.find(route => `/home/${route.path}` === path)) return true
-  }
-  return false;
-};
-
 
 export const getMenuLabelByPath = (menus, path) => {
   let label_ = '';

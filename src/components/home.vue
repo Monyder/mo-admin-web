@@ -5,7 +5,7 @@
         </el-aside>
         <el-container :class="{ right_unfold: leftCollapse }" class="content">
             <el-header :class="{ right_unfold: leftCollapse }" class="header">
-                <top-header :leftCollapse.sync="leftCollapse"/>
+                <top-header :leftCollapse.sync="leftCollapse" @addTabProxy="addTabProxy"/>
             </el-header>
             <el-main :class="{ right_unfold: leftCollapse }" class="main">
                 <center-main ref="centerMain"/>

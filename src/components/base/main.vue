@@ -72,9 +72,17 @@
         let targetTab = this.openTabs.find(openTab => openTab.name === path);
         if (!targetTab) {
           let label = getMenuLabelByPath(this.$store.state.menus, path.replace('/home/', ''));
-          if (label) this.addTab(label, path);
+          if (label) {
+            this.addTab(label, path);
+            return;
+          }
+          let tempMenu = sessionStorage.getItem('tempMenu');
+          if (tempMenu) {
+            this.addTab(JSON.parse(tempMenu).nodeName, path);
+            return;
+          }
         }
-        this.activeTab = path
+        //this.activeTab = path
       }
     }
   }

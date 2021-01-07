@@ -66,10 +66,12 @@
           await this.handleDisMenu(assembleMenus);
           this.treeData = assembleMenus;
         } else this.treeData = assembleMenus;
-        if (this.roleMenuData.menuIds == null || undefined) this.roleMenuData.menuIds = ",";
-        this.ids = this.roleMenuData.menuIds.split(",");
+        if (this.roleMenuData.menuIds) this.ids = this.roleMenuData.menuIds.split(",");
       },
       handleChecked() {
+        if (this.ids.length === 0) {
+          return;
+        }
         this.ids.forEach((i) => {
           const node = this.$refs.tree.getNode(i);
           if (node.isLeaf) {
@@ -90,6 +92,7 @@
         await this._post(this.$parent.url + '/updateRoleMenu', {id: this.roleMenuData.id, menuIds: ids.join(',')});
       },
       async handleClose() {
+        this.ids = [];
         await this.handleUpdateRole(this.$refs.tree.getHalfCheckedKeys().concat(this.$refs.tree.getCheckedKeys()));
         this.$emit('refGetSysRoleInfo');
       }

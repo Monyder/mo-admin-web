@@ -48,9 +48,14 @@
               </el-form-item>
             </el-col>
           </el-row>
-
-          <el-row>
-          </el-row>
+          <el-col :span="11">
+            <el-form-item label="菜单类型:" prop="funcType">
+              <el-select style="width: 100%" v-model="ruleForm.funcType">
+                <el-option label="系统功能" value="0"></el-option>
+                <el-option label="开发功能" value="1"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-form>
       </el-row>
       <span slot="footer" class="dialog-footer">

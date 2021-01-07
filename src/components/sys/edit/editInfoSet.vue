@@ -3,7 +3,7 @@
     <el-dialog :title="title" :visible="isInfoSetEditShow" @open="handleOpen" :modal="false" width="50%"
                :before-close="handleClose">
       <el-row>
-        <el-form :model="ruleForm" status-icon :rules="rules" ref="form" v-loading="$store.state.loading"
+        <el-form :model="ruleForm" status-icon :rules="rules" ref="form"
                  label-width="100px">
           <el-row>
             <el-col :span="11">

@@ -17,6 +17,7 @@ import {
   clearCookie,
   clearRouteAndMenu,
   initRouter,
+  addMenuDevToRouter,
   getIsAuthority,
   assembleMenus
 } from './libs/base'
@@ -26,7 +27,7 @@ Vue.config.productionTip = false;
 Vue.prototype._post = postRequest;
 Vue.prototype._get = getRequest;
 Vue.prototype.assembleMenus = assembleMenus;
-Vue.prototype.getIsAuthority = getIsAuthority;
+Vue.prototype.addMenuDevToRouter = addMenuDevToRouter;
 Vue.prototype.clearCookie = clearCookie;
 Vue.prototype.clearRouteAndMenu = clearRouteAndMenu;
 Vue.filter('dateFormat', (dataStr, pattern = 'YYYY-MM-DD') => {

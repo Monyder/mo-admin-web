@@ -86,6 +86,8 @@
         this.tableData = res;
       },
       async handerReturnDirectory() {
+        const {data: res} = await this._post('/sysMenu/sys-menu/getSysMenuByNodePath', {'nodePath': 'sysInfoSet'});
+        this.addMenuDevToRouter(res);
         await this.$router.push({path: '/home/sysInfoSet'}).catch((err) => {
         });
       },
