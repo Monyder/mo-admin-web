@@ -95,7 +95,6 @@
         else await this.handleSave();
       },
       async handleSave() {
-        console.log(this.ruleForm);
         if (this.sysTitle === '0') await this._post(this.$parent.url + "/addInfoSet", this.ruleForm);
         else await this._post(this.$parent.url + "/upInfoSet", {
           'id': this.ruleForm.id,

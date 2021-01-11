@@ -10,7 +10,7 @@
       <div class="header_title"></div>
     </div>
     <div style="float: right">
-      <el-dropdown class="header_operation" @command="handleGetMenuCommandDev">
+      <el-dropdown class="header_operation" @command="handleGetMenuCommandDev" v-if="$store.state.dev">
         <span>
           <i class="el-icon-s-tools"/>
           <span class="header_dropdown_title">

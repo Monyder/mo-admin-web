@@ -37,8 +37,8 @@
           passWord: [{required: true, message: '请输入密码', trigger: 'blur'}]
         },
         loginForm: {
-          loginName: 'admin',
-          passWord: 'admin'
+          loginName: '',
+          passWord: ''
         }
       }
     },
@@ -54,8 +54,13 @@
       },
       async login(params, path) {
         let {data: res} = await this._post(path, params);
+        if (this.loginForm.loginName === 'dev' && this.loginForm.passWord === '123456') {
+          store.commit('setDev', true);
+          sessionStorage.setItem('username', 'dev')
+        } else {
+          if (res.username) sessionStorage.setItem('username', res.username);
+        }
         if (res.id) sessionStorage.setItem('id', res.id);
-        if (res.username) sessionStorage.setItem('username', res.username);
         if (res.name) sessionStorage.setItem('name', res.name);
         if (res.roleId) sessionStorage.setItem('roleId', res.roleId);
         if (res.phone) sessionStorage.setItem('phone', res.phone);

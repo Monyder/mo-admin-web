@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     loading: false,
+    dev: false,
     isAuthority: "0",
     menus: [],
     homeRoute: [],
@@ -16,6 +17,9 @@ export default new Vuex.Store({
   mutations: {
     setLoading(state, isLoading) {
       state.loading = isLoading
+    },
+    setDev(state, dev) {
+      state.dev = dev
     },
     setIsAuthority(state, isAuthority) {
       state.isAuthority = isAuthority

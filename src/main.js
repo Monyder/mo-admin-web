@@ -44,6 +44,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
   NProgress.start();
+  if (sessionStorage.getItem('username') === 'dev') store.commit('setDev', true);
   getIsAuthority().then(err => {
   });
   initRouter().then(err => {
