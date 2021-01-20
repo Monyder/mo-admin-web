@@ -11,10 +11,10 @@
 </template>
 
 <script>
-  import {getMenuLabelByPath} from '../../libs/base.js'
+  import {getMenuLabelByPath} from '../../../libs/base.js'
 
   export default {
-    name: "CenterMain",
+    name: 'baseMain',
     data() {
       return {
         activeTab: '/home',

@@ -12,6 +12,7 @@ import 'default-passive-events'
 import store from './libs/store'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import './components/common/icons'
 import {getRequest, postRequest} from './libs/api'
 import {
   clearCookie,
@@ -19,7 +20,8 @@ import {
   initRouter,
   addMenuDevToRouter,
   getIsAuthority,
-  assembleMenus
+  assembleMenus,
+  getMenuLabelByPath
 } from './libs/base'
 
 Vue.use(ElementUI);
@@ -37,18 +39,38 @@ Vue.filter('dateFormat', (dataStr, pattern = 'YYYY-MM-DD') => {
 
 NProgress.configure({showSpinner: false})
 router.beforeEach((to, from, next) => {
+  NProgress.start();
   if (to.path === '/') {
-    NProgress.start();
     clearCookie();
     next();
     return;
   }
-  NProgress.start();
+  if (to.path === '/404' || to.path == '/home/page404' || to.path === '/errPage') {
+    next();
+    return;
+  }
   if (sessionStorage.getItem('username') === 'dev') store.commit('setDev', true);
-  getIsAuthority().then(err => {
+  getIsAuthority().then(res => {
   });
-  initRouter().then(err => {
-  });
+  initRouter().then(res => {
+  })
+  if (to.matched.length === 0) {
+    const getMenus = JSON.parse(sessionStorage.getItem("getMenus"));
+    let label = getMenuLabelByPath(getMenus, to.path.replace('/home/', ''));
+    if (label) {
+      next();
+      return;
+    }
+    if (to.path.search('home') === -1) {
+      next({
+        path: '/404'
+      });
+      return;
+    }
+    next({
+      path: '/home/page404'
+    });
+  }
   next();
   return;
 });

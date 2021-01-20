@@ -1,14 +1,17 @@
 <template>
+     
   <div>
-
+    {{msg}}
   </div>
 </template>
+<style>
 
+</style>
 <script>
   export default {
     data() {
-      return {
-      }
+      return {msg: 'vue模板页'}
     }
   }
 </script>
+  

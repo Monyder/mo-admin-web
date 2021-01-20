@@ -1,27 +1,26 @@
 <template>
     <el-container class="container">
         <el-aside :class="{ menu_collapse: leftCollapse }" class="menu">
-            <left-menu @addTabProxy="addTabProxy" :isCollapse="leftCollapse"/>
+            <base-menu @addTabProxy="addTabProxy" :isCollapse="leftCollapse"/>
         </el-aside>
         <el-container :class="{ right_unfold: leftCollapse }" class="content">
             <el-header :class="{ right_unfold: leftCollapse }" class="header">
-                <top-header :leftCollapse.sync="leftCollapse" @addTabProxy="addTabProxy"/>
+                <base-header :leftCollapse.sync="leftCollapse" @addTabProxy="addTabProxy"/>
             </el-header>
             <el-main :class="{ right_unfold: leftCollapse }" class="main">
-                <center-main ref="centerMain"/>
+                <base-main ref="centerMain"/>
             </el-main>
         </el-container>
     </el-container>
 </template>
 
 <script>
-  import LeftMenu from "./base/menu";
-  import TopHeader from "./base/header";
-  import CenterMain from "./base/main";
+  import baseMenu from "./common/base/menu";
+  import baseHeader from "./common/base/header";
+  import baseMain from "./common/base/main";
 
   export default {
-    name: "home",
-    components: {LeftMenu, TopHeader, CenterMain},
+    components: {baseMenu, baseHeader, baseMain},
     data() {
       return {
         leftCollapse: false,

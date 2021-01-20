@@ -1,30 +1,34 @@
 <template>
-  <div class="login_container">
-    <el-row class="header_title">
-      监狱会见管理系统V1.0.1
-    </el-row>
-    <el-row class="center_area">
-      <div class="login_area">
-        <el-form ref="form" :rules="rules" :model="loginForm" v-loading="$store.state.loading">
-          <h3 class="login_title">会见系统</h3>
-          <el-form-item prop="loginName">
-            <el-input v-model="loginForm.loginName" prefix-icon="el-icon-s-custom"
-                      auto-complete="off" placeholder="账号" @keyup.enter.native="submitClick"></el-input>
-          </el-form-item>
-          <el-form-item prop="passWord">
-            <el-input show-password v-model="loginForm.passWord" prefix-icon="el-icon-key"
-                      auto-complete="off" placeholder="密码" @keyup.enter.native="submitClick"></el-input>
-          </el-form-item>
-          <el-form-item style="width: 100%">
-            <el-button type="primary" style="width: 100%" @click="submitClick">登录</el-button>
-          </el-form-item>
-        </el-form>
-        <!--<img src="../assets/img/bg_login_form.png" height="105" width="435"
-             style="position: absolute; bottom: -3px;left:0;"/>-->
+  <div class="login-container">
+    <el-form ref="form" :model="loginForm" :rules="rules" class="login-form" autocomplete="on" label-position="left">
+      <div class="title-container">
+        <h3 class="title">系统登录</h3>
       </div>
-    </el-row>
+      <el-form-item prop="loginName">
+        <span class="svg-container">
+          <svg-icon icon-class="user"/>
+        </span>
+        <el-input v-model="loginForm.loginName" placeholder="请输入用户名" name="loginName" type="text" tabindex="1"
+                  autocomplete="on"/>
+      </el-form-item>
+      <el-form-item prop="passWord">
+          <span class="svg-container">
+            <svg-icon icon-class="password"/>
+          </span>
+        <el-input v-model="loginForm.passWord" ref="passWord" placeholder="请输入密码" :type="passwordType" name="passWord"
+                  tabindex="2"
+                  autocomplete="on"
+                  @keyup.enter.native="submitClick"/>
+        <span class="show-pwd" @click="showPwd">
+              <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
+          </span>
+      </el-form-item>
+      <el-button type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="submitClick">登录
+      </el-button>
+    </el-form>
   </div>
 </template>
+
 <script>
   import store from "../libs/store";
 
@@ -36,6 +40,7 @@
           loginName: [{required: true, message: '请输入用户名', trigger: 'blur'}],
           passWord: [{required: true, message: '请输入密码', trigger: 'blur'}]
         },
+        passwordType: 'password',
         loginForm: {
           loginName: '',
           passWord: ''
@@ -66,61 +71,139 @@
         if (res.phone) sessionStorage.setItem('phone', res.phone);
         await this.$router.replace("/home").catch(err => {
         });
-      }
+      },
+      showPwd() {
+        if (this.passwordType === 'password') {
+          this.passwordType = ''
+        } else {
+          this.passwordType = 'password'
+        }
+        this.$nextTick(() => {
+          this.$refs.passWord.focus()
+        })
+      },
     }
   }
 </script>
-<style scoped>
-  .login_container {
+
+<style lang="scss">
+  $bg: #283443;
+  $light_gray: #fff;
+  $cursor: #fff;
+
+  @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+    .login-container .el-input input {
+      color: $cursor;
+    }
+  }
+
+  /* reset element-ui css */
+  .login-container {
+    .el-input {
+      display: inline-block;
+      height: 47px;
+      width: 85%;
+
+      input {
+        background: transparent;
+        border: 0px;
+        -webkit-appearance: none;
+        border-radius: 0px;
+        padding: 12px 5px 12px 15px;
+        color: $light_gray;
+        height: 47px;
+        caret-color: $cursor;
+
+        &:-webkit-autofill {
+          box-shadow: 0 0 0px 1000px $bg inset !important;
+          -webkit-text-fill-color: $cursor !important;
+        }
+      }
+    }
+
+    .el-form-item {
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      color: #454545;
+    }
+  }
+</style>
+
+<style lang="scss" scoped>
+  $bg: #2d3a4b;
+  $dark_gray: #889aa4;
+  $light_gray: #eee;
+
+  .login-container {
+    min-height: 100%;
     width: 100%;
     height: 100%;
     position: fixed;
-    background-image: url("../assets/img/basks.jpg");
-    background-position: 50% 50%;
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
+    background-color: $bg;
+    overflow: hidden;
 
-  .header_title {
-    width: 100%;
-    height: 195px;
-    font-size: 2.4rem;
-    padding-top: 58px;
-    text-shadow: 0 1px 1px #ddd, 0 2px 1px #deebfc, 0 8px 5px rgba(0, 0, 0, .3);
-    color: #fff;
-    text-align: center;
-  }
+    .login-form {
+      position: relative;
+      width: 450px;
+      max-width: 100%;
+      padding: 200px 35px 0;
+      margin: 0 auto;
+      overflow: hidden;
+    }
 
-  .logo_img {
-    height: 55px;
-    width: 80px;
-    position: relative;
-    top: 14px;
-  }
+    .tips {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
 
-  .center_area {
-    width: 100%;
-  }
+      span {
+        &:first-of-type {
+          margin-right: 16px;
+        }
+      }
+    }
 
-  .login_area {
-    border-radius: 15px;
-    margin: 30px auto;
-    width: 380px;
-    height: 200px;
-    padding: 60px 28px 120px 28px;
-    background: #fff;
-    box-shadow: 0 0 25px rgb(34, 34, 34);
-    position: relative;
-  }
+    .svg-container {
+      padding: 6px 5px 6px 15px;
+      color: $dark_gray;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
+    }
 
-  .login_title {
-    margin: 0 auto 40px auto;
-    text-align: center;
-    font-size: 25px;
-    font-weight: 400;
-  }
+    .title-container {
+      position: relative;
 
-  .el-form-item {
-    margin-bottom: 30px;
+      .title {
+        font-size: 26px;
+        color: $light_gray;
+        margin: 0px auto 40px auto;
+        text-align: center;
+        font-weight: bold;
+      }
+    }
+
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 16px;
+      color: $dark_gray;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .thirdparty-button {
+      position: absolute;
+      right: 0;
+      bottom: 6px;
+    }
+
+    @media only screen and (max-width: 470px) {
+      .thirdparty-button {
+        display: none;
+      }
+    }
   }
 </style>

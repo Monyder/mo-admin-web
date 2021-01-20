@@ -32,7 +32,7 @@ export const initRouter = async () => {
   }
   let {data} = await postRequest('/sysMenu/sys-menu/getSysMenuByFuncType', {'funcType': '0'});
   if (!data || data.length === 0) {
-    return
+    return;
   }
   let routes = [];
   let {children} = data[0];
@@ -49,10 +49,20 @@ export const initRouter = async () => {
     }
     routes.push(route);
   }
+  routes.push({
+    path: 'page404',
+    component: () => import('../components/common/errPage/404')
+  });
+  routes.push({
+    path: 'page500',
+    name: 'page500',
+    component: () => import('../components/common/errPage/err')
+  });
   home.children = [...home.children, ...routes];
   router.addRoutes([home]);
   store.commit('setHomeRoute', home);
   store.commit('setMenus', assembleMenus(children));
+  sessionStorage.setItem('getMenus', JSON.stringify(assembleMenus(children)));
 }
 
 export const assembleRouter = (routes, menus) => {
