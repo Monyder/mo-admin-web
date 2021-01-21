@@ -89,6 +89,7 @@ export const addMenuDevToRouter = (menu) => {
     component: () => import(`../components${nodeComponent}`)
   }
   if (home.children && home.children instanceof Array) {
+    home.children = home.children.filter(t => t.name != 'page500');
     home.children.push(route);
   }
   router.addRoutes([home]);

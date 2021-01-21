@@ -61,6 +61,13 @@ router.beforeEach((to, from, next) => {
       next();
       return;
     }
+    let tempMenu = JSON.parse(sessionStorage.getItem('tempMenu'));
+    if (tempMenu) {
+      if (tempMenu.nodePath === to.path.replace('/home/', '')) {
+        next();
+        return;
+      }
+    }
     if (to.path.search('home') === -1) {
       next({
         path: '/404'
