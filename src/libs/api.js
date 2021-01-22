@@ -52,7 +52,7 @@ axios.interceptors.response.use(resp => {
   NProgress.done();
   store.commit('setLoading', false);
   if (err.response.status === 500 || err.response.status === 504) {
-    router.push({name: 'errPage', params: {'msg': '请求失败，内部服务器错误...'}}).catch(err => {
+    router.push({name: 'errPage', params: {'msg': '请求失败，服务器可能出了点问题...'}}).catch(err => {
     });
   } else if (err.response.status === 404) {
     router.push("/home/page404").catch(err => {

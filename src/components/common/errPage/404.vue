@@ -24,7 +24,7 @@
     name: 'Page404',
     computed: {
       message() {
-        return '网站管理员说您无法进入此页面...'
+        return '服务器找不到请求的网址...'
       }
     },
     methods: {

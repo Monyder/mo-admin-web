@@ -7,7 +7,7 @@
       <el-col :span="12">
         <h1 class="text-jumbo text-ginormous">Oops!</h1>
         <h2>{{massage}}</h2>
-        <h6>如有不满请联系你领导！</h6>
+        <h6>发生了点意外，请稍后重试...</h6>
       </el-col>
       <el-col :span="12">
         <img :src="errGif" width="313" height="428" alt="Girl has dropped her ice cream.">
@@ -24,7 +24,7 @@
     data() {
       return {
         errGif: errGif + '?' + +new Date(),
-        massage: '系统出错啦，请联系管理人员!'
+        massage: '系统出错啦，可以刷新页面尝试一下...'
       }
     },
     mounted() {
